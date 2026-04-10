@@ -105,6 +105,34 @@ video {
 
 <!-- TELA 1 -->
 <div id="tela1" class="screen">
+  <h1>Feliz aniversário, 19tou !! 🎉</h1>
+  <button onclick="entrar()">Surpresa</button>
+</div>
+
+<!-- TELA 2 -->
+<div id="tela2" class="screen hidden">
+  <div class="video-container">
+    <video id="video" controls>
+      <source src="video.mp4" type="video/mp4">
+      Seu navegador não suporta vídeo.
+    </video>
+  </div>
+</div>
+
+<script>
+function entrar() {
+  document.getElementById("tela1").classList.add("hidden");
+  document.getElementById("tela2").classList.remove("hidden");
+
+  const video = document.getElementById("video");
+  video.play();
+}
+</script>
+
+</body>
+</html>
+<!-- TELA 1 -->
+<div id="tela1" class="screen">
   <h1> Feliz aniversário, 19tou !!</h1>
   <button onclick="entrar()">Surpresa</button>
 </div>
