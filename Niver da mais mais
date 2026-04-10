@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Site com Vídeo</title>
+<title>Meu Site com Vídeo</title>
 
 <style>
 * {
@@ -16,33 +16,35 @@
 body {
   height: 100vh;
   overflow: hidden;
-  background: linear-gradient(45deg, #0a0014, #1a0033, #2b0057);
+  background: linear-gradient(45deg, #0a0014, #1a0033, #2b0057, #000000);
   background-size: 300% 300%;
   animation: fundoAnimado 10s infinite alternate;
   color: white;
 }
 
+/* fundo animado */
 @keyframes fundoAnimado {
   0% { background-position: left; }
   100% { background-position: right; }
 }
 
-/* Efeito de partículas */
+/* efeito partículas */
 body::before {
   content: "";
   position: absolute;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
   background-size: 40px 40px;
-  animation: movimento 20s linear infinite;
+  animation: mover 18s linear infinite;
 }
 
-@keyframes movimento {
-  from { transform: translate(0, 0); }
-  to { transform: translate(-200px, -200px); }
+@keyframes mover {
+  from { transform: translate(0,0); }
+  to { transform: translate(-200px,-200px); }
 }
 
+/* telas */
 .screen {
   position: absolute;
   width: 100%;
@@ -52,6 +54,7 @@ body::before {
   justify-content: center;
   flex-direction: column;
   transition: opacity 0.8s ease;
+  text-align: center;
 }
 
 .hidden {
@@ -59,17 +62,18 @@ body::before {
   pointer-events: none;
 }
 
+/* texto */
 h1 {
   font-size: 2.5rem;
   margin-bottom: 20px;
-  text-align: center;
 }
 
+/* botão */
 button {
   padding: 12px 25px;
   font-size: 16px;
   border: none;
-  border-radius: 25px;
+  border-radius: 30px;
   background: linear-gradient(45deg, purple, black);
   color: white;
   cursor: pointer;
@@ -80,44 +84,75 @@ button:hover {
   transform: scale(1.1);
 }
 
-/* Vídeo */
+/* vídeo */
 .video-container {
-  width: 80%;
-  max-width: 900px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-iframe {
-  width: 100%;
-  height: 500px;
+video {
+  width: 75%;
+  max-width: 900px;
   border-radius: 15px;
-  box-shadow: 0 0 30px purple;
+  box-shadow: 0 0 40px purple;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Tela inicial -->
-<div id="inicio" class="screen">
-  <h1>Clique para assistir 👀</h1>
-  <button onclick="entrar()">Entrar</button>
+<!-- TELA 1 -->
+<div id="tela1" class="screen">
+  <h1> Feliz aniversário, 19tou !!</h1>
+  <button onclick="entrar()">Surpresa</button>
 </div>
 
-<!-- Tela do vídeo -->
-<div id="videoTela" class="screen hidden">
+<!-- TELA 2 -->
+<div id="tela2" class="screen hidden">
   <div class="video-container">
-    <iframe 
-      src="https://www.youtube.com/embed/hbBXWhsvqDs" 
-      frameborder="0" 
-      allowfullscreen>
-    </iframe>
+    <video id="video" controls>
+      <source src="video.mp4" type="video/mp4">
+    </video>
+
+    <!-- áudio invisível -->
+    <audio id="audio" preload="auto">
+      <source src="audio.mp3" type="audio/mpeg">
+    </audio>
   </div>
 </div>
 
 <script>
 function entrar() {
-  document.getElementById("inicio").classList.add("hidden");
-  document.getElementById("videoTela").classList.remove("hidden");
+  document.getElementById("tela1").classList.add("hidden");
+  document.getElementById("tela2").classList.remove("hidden");
+
+  const video = document.getElementById("video");
+  const audio = document.getElementById("audio");
+
+  // quando vídeo começar, áudio começa junto
+  video.addEventListener("play", () => {
+    audio.currentTime = video.currentTime;
+    audio.play();
+  });
+
+  // pausa os dois juntos
+  video.addEventListener("pause", () => {
+    audio.pause();
+  });
+
+  // sincroniza se o usuário arrastar o vídeo
+  video.addEventListener("seeking", () => {
+    audio.currentTime = video.currentTime;
+  });
+
+  // mantém sincronizado durante playback
+  video.addEventListener("timeupdate", () => {
+    if (Math.abs(audio.currentTime - video.currentTime) > 0.3) {
+      audio.currentTime = video.currentTime;
+    }
+  });
 }
 </script>
 
