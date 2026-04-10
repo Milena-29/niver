@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meu Site com Vídeo</title>
+<title>Meu Site com Foto</title>
 
 <style>
 * {
@@ -84,15 +84,15 @@ button:hover {
   transform: scale(1.1);
 }
 
-/* vídeo */
-.video-container {
+/* imagem */
+.image-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
 
-video {
+.image-container img {
   width: 75%;
   max-width: 900px;
   border-radius: 15px;
@@ -111,11 +111,8 @@ video {
 
 <!-- TELA 2 -->
 <div id="tela2" class="screen hidden">
-  <div class="video-container">
-    <video id="video" controls>
-      <source src="video.mp4" type="video/mp4">
-      Seu navegador não suporta vídeo.
-    </video>
+  <div class="image-container">
+    <img src="a884e768-c1fc-4561-bd9a-750cd8b0028c.png" alt="Foto especial">
   </div>
 </div>
 
@@ -123,64 +120,6 @@ video {
 function entrar() {
   document.getElementById("tela1").classList.add("hidden");
   document.getElementById("tela2").classList.remove("hidden");
-
-  const video = document.getElementById("video");
-  video.play();
-}
-</script>
-
-</body>
-</html>
-<!-- TELA 1 -->
-<div id="tela1" class="screen">
-  <h1> Feliz aniversário, 19tou !!</h1>
-  <button onclick="entrar()">Surpresa</button>
-</div>
-
-<!-- TELA 2 -->
-<div id="tela2" class="screen hidden">
-  <div class="video-container">
-    <video id="video" controls>
-      <source src="video.mp4" type="video/mp4">
-    </video>
-
-    <!-- áudio invisível -->
-    <audio id="audio" preload="auto">
-      <source src="audio.mp3" type="audio/mpeg">
-    </audio>
-  </div>
-</div>
-
-<script>
-function entrar() {
-  document.getElementById("tela1").classList.add("hidden");
-  document.getElementById("tela2").classList.remove("hidden");
-
-  const video = document.getElementById("video");
-  const audio = document.getElementById("audio");
-
-  // quando vídeo começar, áudio começa junto
-  video.addEventListener("play", () => {
-    audio.currentTime = video.currentTime;
-    audio.play();
-  });
-
-  // pausa os dois juntos
-  video.addEventListener("pause", () => {
-    audio.pause();
-  });
-
-  // sincroniza se o usuário arrastar o vídeo
-  video.addEventListener("seeking", () => {
-    audio.currentTime = video.currentTime;
-  });
-
-  // mantém sincronizado durante playback
-  video.addEventListener("timeupdate", () => {
-    if (Math.abs(audio.currentTime - video.currentTime) > 0.3) {
-      audio.currentTime = video.currentTime;
-    }
-  });
 }
 </script>
 
