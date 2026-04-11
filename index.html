@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meu Site com Foto</title>
+<title>Meu Site</title>
 
 <style>
 * {
@@ -83,21 +83,6 @@ button {
 button:hover {
   transform: scale(1.1);
 }
-
-/* imagem */
-.image-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.image-container img {
-  width: 75%;
-  max-width: 900px;
-  border-radius: 15px;
-  box-shadow: 0 0 40px purple;
-}
 </style>
 </head>
 
@@ -111,15 +96,19 @@ button:hover {
 
 <!-- TELA 2 -->
 <div id="tela2" class="screen hidden">
-  <div class="image-container">
-    <img src="a884e768-c1fc-4561-bd9a-750cd8b0028c.png" alt="Foto especial">
-  </div>
+  <h1>🎂 Aproveite seu dia especial! 🎶</h1>
 </div>
+
+<!-- ÁUDIO -->
+<audio id="musica" src="é-seu-aniversário.mp3"></audio>
 
 <script>
 function entrar() {
   document.getElementById("tela1").classList.add("hidden");
   document.getElementById("tela2").classList.remove("hidden");
+
+  // tocar música
+  document.getElementById("musica").play();
 }
 </script>
 
