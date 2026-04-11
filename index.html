@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meu Site</title>
+<title>Feliz Aniversário</title>
 
 <style>
 * {
@@ -22,26 +22,9 @@ body {
   color: white;
 }
 
-/* fundo animado */
 @keyframes fundoAnimado {
   0% { background-position: left; }
   100% { background-position: right; }
-}
-
-/* efeito partículas */
-body::before {
-  content: "";
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-  background-size: 40px 40px;
-  animation: mover 18s linear infinite;
-}
-
-@keyframes mover {
-  from { transform: translate(0,0); }
-  to { transform: translate(-200px,-200px); }
 }
 
 /* telas */
@@ -53,8 +36,8 @@ body::before {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  transition: opacity 0.8s ease;
   text-align: center;
+  transition: opacity 0.8s;
 }
 
 .hidden {
@@ -62,10 +45,10 @@ body::before {
   pointer-events: none;
 }
 
-/* texto */
 h1 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+  font-size: 2rem;
+  max-width: 800px;
+  padding: 20px;
 }
 
 /* botão */
@@ -83,10 +66,19 @@ button {
 button:hover {
   transform: scale(1.1);
 }
+
+/* canvas partículas */
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 </style>
 </head>
 
 <body>
+
+<canvas id="canvas"></canvas>
 
 <!-- TELA 1 -->
 <div id="tela1" class="screen">
@@ -96,8 +88,7 @@ button:hover {
 
 <!-- TELA 2 -->
 <div id="tela2" class="screen hidden">
-  <h1> Feliz aniversário, gabis! 🎉💖
-
+  <h1>
 Hoje você completa 19 anos, e eu só queria te lembrar o quanto você é especial para mim. Não é só minha irmã mais velha. Você é alguém que eu admiro de verdade, pela sua força, pelo seu jeito e por tudo o que você é.
 
 Obrigada por estar comigo nos momentos bons e até nos difíceis, por me aconselhar, me apoiar.
@@ -107,20 +98,94 @@ Espero que esse novo ciclo da sua vida venha cheio de coisas boas, conquistas, f
 Nunca esquece que eu sempre vou estar aqui por você, assim como você sempre esteve por mim, ainda mais agora com a sua carteira de motorista. Amo-te!💕
 
 Parabéns pelos seus 19 anos! 🎂✨
-</h1>
+  </h1>
 </div>
 
 <!-- ÁUDIO -->
-<audio id="musica" src="é-seu-aniversário.mp3"></audio>
+<audio id="musica" src="é-seu-aniversário.mp3" loop></audio>
 
 <script>
 function entrar() {
   document.getElementById("tela1").classList.add("hidden");
   document.getElementById("tela2").classList.remove("hidden");
 
-  // tocar música
-  document.getElementById("musica").play();
+  let musica = document.getElementById("musica");
+  musica.volume = 0;
+  musica.play();
+
+  // fade-in
+  let volume = 0;
+  let fade = setInterval(() => {
+    if (volume < 1) {
+      volume += 0.02;
+      musica.volume = volume;
+    } else {
+      clearInterval(fade);
+    }
+  }, 200);
+
+  iniciarParticulas(musica);
 }
+
+/* PARTÍCULAS */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particulas = [];
+
+function criarParticulas(qtd) {
+  particulas = [];
+  for (let i = 0; i < qtd; i++) {
+    particulas.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 3,
+      dx: (Math.random() - 0.5) * 2,
+      dy: (Math.random() - 0.5) * 2
+    });
+  }
+}
+
+function desenharParticulas(intensidade) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  particulas.forEach(p => {
+    p.x += p.dx * intensidade;
+    p.y += p.dy * intensidade;
+
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r + intensidade, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,255,255,0.7)";
+    ctx.fill();
+  });
+}
+
+/* SIMULAÇÃO DE BATIDA */
+function iniciarParticulas(audio) {
+  criarParticulas(120);
+
+  function animar() {
+    // intensidade varia simulando batida
+    let intensidade = 1 + Math.sin(Date.now() * 0.005) * 2;
+
+    desenharParticulas(intensidade);
+    requestAnimationFrame(animar);
+  }
+
+  animar();
+}
+
+/* responsivo */
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 </script>
 
 </body>
